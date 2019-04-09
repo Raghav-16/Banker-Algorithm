@@ -1,0 +1,41 @@
+np=int(input("\n Enter number of processes "))
+nr=int(input("\n Enter total number of resources available"))
+avail=[]
+for i in range(0,np):
+    print("\n Enter available resources for process ", i+1 )
+    x=int(input())
+    avail.insert(i,x)
+maxr=[]
+for i in range(0,np):
+    print("\n Enter maximum resources for process ", i+1 )
+    x=int(input())
+    maxr.insert(i,x)
+need=[]
+for i in range(0,np):
+    x=maxr[i]-avail[i]
+    need.insert(i,x)
+    #print("\n",need[i])
+total=nr
+for i in range(0,np):
+    total=total+avail[i]
+#print(total)
+cond=[]
+for i in range(0,np):
+    cond.insert(i,1)
+safe=[]
+while nr!=total:
+   # print("while")
+    for i in range(0,np):
+        if (maxr[i]-avail[i])<nr and cond[i]==1:
+            nr=nr+avail[i]
+            cond[i]=0
+            safe.insert(i,i)
+            print(nr)
+
+for i in range(0,np):
+    print(safe[i],"\n")
+
+
+    
+    
+    
