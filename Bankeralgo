@@ -1,51 +1,82 @@
-np=int(input("\n Enter number of processes "))
-ntr=int(input("\n Enter total number of resources available"))
-avail=[]
-for i in range(0,np):
-    print("\n Enter available resources for process ", i+1 )
-    x=int(input())
-    avail.insert(i,x)
-maxr=[]
-for i in range(0,np):
-    print("\n Enter maximum need resources for process ", i+1 )
-    x=int(input())
-    maxr.insert(i,x)
-need=[]
-for i in range(0,np):
-    x=maxr[i]-avail[i]
-    need.insert(i,x)
-nr=0
-for i in range(0,np):
-    nr=nr+avail[i]
-ar=ntr-nr
-cond=[]
-for i in range(0,np):
-    cond.insert(i,1)
-safe=[]
-s=0
-count=1
-while count <= np:
-    save=True  
-    if save==True:
-        set=False
-        for i in range(0,np):
-            if need[i]<ar and cond[i]==1:
-                safe.insert(s,i)
-                s=s+1
-                cond[i]=0
-                set=True
-            if set==True:
-                ar=ar+avail[i]
-                count=count+1
-            if cond[i]==0:
-                save=False            
+def inP():
+    np=int(input("\n Enter number of processes \n"))
+    ntr=int(input("\n Enter total number of resources available\n"))
+    if np==0 or ntr==0:
+        print("Number of processes or resources can not be zero\n","PLEASE REENTER")
+        inP()
+    inR(np,ntr)
+    
+def inR(np,ntr):        
+    avail=[]
+    for i in range(0,np):
+        print("\n Enter available resources for process ", i+1 )
+        x=int(input())
+        avail.insert(i,x)
+    maxr=[]
+    for i in range(0,np):
+        print("\n Enter maximum need resources for process ", i+1 )
+        x=int(input())
+        if x>ntr or x<0:
+            print("The Max Need can not be more than total resources available \n Please reenter \n")
+            x=int(input())
+        maxr.insert(i,x)
+    need=[]
+    tn=0
+    for i in range(0,np):
+        x=maxr[i]-avail[i]
+        need.insert(i,x)
+        tn=tn+x
+    nr=0
+    for i in range(0,np):
+        nr=nr+avail[i]
+    ar=ntr-nr
+    cond=[]
+    for i in range(0,np):
+        cond.insert(i,1)
+    check(np,ntr,need,ar,cond,avail,tn)
+    
+def check(np,ntr,need,ar,cond,avail,tn):
+    safe=[]
+    s=0
+    count=1
+    if tn>ntr+np:
+        print("\nTotal Need of processes is greater then Available resources \n So the system is in DEADLOCK")
+        conti()
     else:
-        break
-print("The Safe Sequence of processes is ")
-for i in range(0,np):
-    print("P",safe[i]+1)
+        while count <= np:
+            save=True  
+            if save==True:
+                set=False
+                for i in range(0,np):
+                    if need[i]<ar and cond[i]==1:
+                        safe.insert(s,i)
+                        s=s+1
+                        cond[i]=0
+                        set=True
+                    if set==True:
+                        ar=ar+avail[i]
+                        count=count+1
+                    if cond[i]==0:
+                        save=False            
+            else:
+                break
+        print("The Safe Sequence of processes is ")
+        for i in range(0,np):
+            print("P",safe[i]+1)
+        conti()
 
-
+def conti():
+    print("\n Do you want to continue? \n if Yes press 1 \n if NO press 0 \n")
+    ans=int(input())
+    if ans==1:
+        print("\n")
+        inP()
+    elif ans==0:
+        return 0
+    else:
+        print("*INVALID SELECTION* \n Please reselect\n")
+        conti()
+inP()
     
     
     
